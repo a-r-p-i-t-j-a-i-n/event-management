@@ -8,7 +8,7 @@ const rsvpRoutes = require('./routes/rsvpRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const errorHandler = require('./middleware/errorHandler'); 
 const userRoutes=require('./routes/userRoutes');
-
+const cors = require('cors');
 dotenv.config();
 
 // Connect to database
@@ -16,7 +16,11 @@ connectDB();
 
 const app = express();
 app.use(express.json());  // Body parser
-
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow requests from this origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
 // Routes
 app.use('/api/events', eventRoutes);
 app.use('/api/events', attendeeRoutes);
