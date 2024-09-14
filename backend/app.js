@@ -15,7 +15,8 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(express.json());  // Body parser
+app.use(express.json()); 
+app.use(cors()); // Body parser
 app.use(cors({
     origin: 'http://localhost:3000', // Allow requests from this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
