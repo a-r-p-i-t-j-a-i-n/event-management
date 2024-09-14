@@ -1,0 +1,30 @@
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    background-color: #f4f4f4;
+    padding: 1rem;
+  }
+  
+  .sidebar h2 {
+    font-size: 1.2rem;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar-item {
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar-link {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .sidebar-link:hover {
+    text-decoration: underline;
+  }
+  
