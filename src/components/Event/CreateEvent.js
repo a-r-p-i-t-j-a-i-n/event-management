@@ -1,40 +1,82 @@
 import React, { useState } from 'react';
-import { createEvent } from '../../utils/eventApi'; // Import the function from eventApi.js
+import { useNavigate } from 'react-router-dom';
+import  createEvent  from '../utils/api'; // Importing API method
 
 const CreateEvent = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState('');
-  const [location, setLocation] = useState('');
+  const [eventData, setEventData] = useState({
+    name: '',
+    description: '',
+    date: '',
+    location: ''
+  });
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    setEventData({
+      ...eventData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createEvent({ name, description, date, location })
-      .then(response => alert('Event created!'))
-      .catch(error => console.error('Error creating event:', error));
+    try {
+      await createEvent(eventData); // API call to create the event
+      navigate('/'); // Navigate to the event list after creation
+    } catch (error) {
+      console.error('Error creating event:', error);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="create-event">
       <h2>Create Event</h2>
-      <label>
-        Name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-      <label>
-        Description:
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-      </label>
-      <label>
-        Date:
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-      </label>
-      <label>
-        Location:
-        <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
-      </label>
-      <button type="submit">Create</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name">Event Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={eventData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            name="description"
+            value={eventData.description}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="date">Date:</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={eventData.date}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="location">Location:</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            value={eventData.location}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn">Create Event</button>
+      </form>
+    </div>
   );
 };
 

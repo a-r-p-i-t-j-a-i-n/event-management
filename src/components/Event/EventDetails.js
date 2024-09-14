@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { getEventDetails } from '../utils/eventApi';
 import { useParams } from 'react-router-dom';
 
 const EventDetails = () => {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get(`/api/events/${id}`)
-      .then(response => setEvent(response.data))
-      .catch(error => console.error('Error fetching event:', error));
+    const fetchEventDetails = async () => {
+      try {
+        const response = await getEventDetails(id);
+        setEvent(response.data);
+      } catch (error) {
+        console.error('Error fetching event details:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEventDetails();
   }, [id]);
 
-  if (!event) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
+  if (!event) return <p>Event not found</p>;
 
   return (
     <div>
@@ -20,7 +31,6 @@ const EventDetails = () => {
       <p>{event.description}</p>
       <p>Date: {new Date(event.date).toLocaleDateString()}</p>
       <p>Location: {event.location}</p>
-      {/* Include options to update or delete event */}
     </div>
   );
 };

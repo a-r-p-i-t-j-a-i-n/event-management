@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css'; // Import the CSS file for styling
 
 const Navbar = () => {
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">Event Management</Link>
-        <ul className="navbar-menu">
+        
+        {/* Mobile Menu Toggle */}
+        <div className="navbar-toggle" onClick={toggleMobileMenu}>
+          ☰
+        </div>
+
+        <ul className={`navbar-menu ${isMobileMenuOpen ? 'mobile-menu active' : 'desktop-menu'}`}>
           <li className="navbar-item">
             <Link to="/events" className="navbar-link">Events</Link>
           </li>
@@ -25,12 +37,16 @@ const Navbar = () => {
           <li className="navbar-item">
             <Link to="/profile" className="navbar-link">Profile</Link>
           </li>
+          <li className="navbar-item">
+            <Link to="/login" className="navbar-link navbar-button">Login</Link>
+          </li>
+          <li className="navbar-item">
+            <Link to="/register" className="navbar-link navbar-button">Signup</Link>
+          </li>
+          <li className="navbar-item">
+            <button onClick={handleLogout} className="navbar-button">Logout</button>
+          </li>
         </ul>
-        <div className="navbar-buttons">
-          <Link to="/login" className="navbar-button">Login</Link>
-          <Link to="/register" className="navbar-button">Signup</Link>
-          <button onClick={handleLogout} className="navbar-button">Logout</button>
-        </div>
       </div>
     </nav>
   );
